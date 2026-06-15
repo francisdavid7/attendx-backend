@@ -1,10 +1,15 @@
 import { registerSchema } from "../../lib/validation/auth.js";
+import { loginSchema } from "../../lib/validation/auth.js";
 import { prisma } from "../../lib/prisma.js";
 import { hashPassword } from "../../lib/auth/password.js";
+import { generateToken } from "../../lib/auth/jwt.js";
+import { comparePassword } from "../../lib/auth/password.js";
 import { sendVerificationEmail } from "../../lib/mail/mail.js";
 import { router } from "../../lib/express.js";
+import type { Request, Response } from "express";
 
-router.post("/register", async (req, res) => {
+// Register enpoint
+router.post("/register", async (req: Request, res: Response) => {
   try {
     // Get the data from the request body
     const body = req.body;
@@ -70,6 +75,56 @@ router.post("/register", async (req, res) => {
     return res.status(500).json({
       error: error.message,
     });
+  }
+});
+
+// Login endpoinnt
+router.post("/login", async (req: Request, res: Response) => {
+  try {
+    const body = req.body;
+    const validatedFields = loginSchema.safeParse(body);
+
+    if (!validatedFields.success) {
+      return res.status(400).json({
+        error: validatedFields.error.flatten(),
+      });
+    }
+
+    // Get the validated data
+    const { email, password } = validatedFields.data;
+
+    // Checking if user exists
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        error: "A user with this email does not exist",
+      });
+    }
+
+    const correctPassword = await comparePassword(password, user.password);
+
+    if (!correctPassword) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const token = generateToken({ id: user.id, role: user.role });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    res.status(200).json({ message: "Login successfull" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 });
 
