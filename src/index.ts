@@ -4,6 +4,7 @@ import cookieparser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import coursesRoutes from "./routes/courses.route.js";
 import tutorStudents from "./routes/tutor.student.route.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(cookieparser());
 app.use("/auth", authRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/tutors-student", tutorStudents);
+app.use("/session", attendanceRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => {
