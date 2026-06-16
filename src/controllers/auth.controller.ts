@@ -8,11 +8,10 @@ import {
   sendResetPasswordEmail,
   sendVerificationEmail,
 } from "../../lib/mail/mail.js";
-import { router } from "../../lib/express.js";
 import type { Request, Response } from "express";
 
-// Get current user endpoint
-router.get("/me", async (req: Request, res: Response) => {
+// Get current user logic
+export const getCurrentUser = async (req: Request, res: Response) => {
   try {
     // get token from cookies header
     const token = req.cookies.token;
@@ -43,10 +42,10 @@ router.get("/me", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Register enpoint
-router.post("/register", async (req: Request, res: Response) => {
+// Register logic
+export const register = async (req: Request, res: Response) => {
   try {
     // Get the data from the request body
     const body = req.body;
@@ -113,10 +112,10 @@ router.post("/register", async (req: Request, res: Response) => {
       error: error.message,
     });
   }
-});
+};
 
-// Login endpoinnt
-router.post("/login", async (req: Request, res: Response) => {
+// Login logic
+export const login = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const validatedFields = loginSchema.safeParse(body);
@@ -163,10 +162,10 @@ router.post("/login", async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Verify email endpoint
-router.put("/confirm-email", async (req: Request, res: Response) => {
+// Verify email logic
+export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const searchQuery = req.query;
     const token = searchQuery.token as string;
@@ -213,10 +212,10 @@ router.put("/confirm-email", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Resend verification email endpoint
-router.post("/resend-email", async (req: Request, res: Response) => {
+// Resend verification email logic
+export const resendEmail = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const { id: userId, email } = body;
@@ -242,10 +241,10 @@ router.post("/resend-email", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Forgot password endpoint
-router.post("/forgot-password", async (req: Request, res: Response) => {
+// Forgot password logic
+export const forgotPassord = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const { email } = body;
@@ -280,10 +279,10 @@ router.post("/forgot-password", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Reset password endpoint
-router.put("/reset-password", async (req: Request, res: Response) => {
+// Rest password logic
+export const resetPassword = async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const { token, password } = body;
@@ -334,16 +333,14 @@ router.put("/reset-password", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Logout endpoint
-router.get("/logout", async (req: Request, res: Response) => {
+// Logout logic
+export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie("token");
     return res.status(204).json({ message: "Logged out successfully" });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-});
-
-export default router;
+};

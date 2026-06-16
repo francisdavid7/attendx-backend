@@ -1,13 +1,15 @@
 import express from "express";
 import app from "../lib/express.js";
-import authControllers from "./auth/auth.controller.js";
 import cookieparser from "cookie-parser";
+import authRoutes from "./routes/auth.routes.js";
+import coursesRoutes from "./routes/courses.route.js";
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieparser());
 
-app.use("/auth", authControllers);
+app.use("/auth", authRoutes);
+app.use("/courses", coursesRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => {
