@@ -182,3 +182,42 @@ export const tutors = async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// Get all attendance
+export const attendance = async (req: Request, res: Response) => {
+  try {
+    const attendance = await prisma.attendance.findMany({
+      select: {
+        session: {
+          select: {
+            tutor: {
+              select: {
+                fullName: true,
+              },
+            },
+            course: {
+              select: {
+                name: true,
+              },
+            },
+            createdAt: true,
+            sessionEndAt: true,
+          },
+        },
+      },
+    });
+
+    const formattedAttendance = attendance.map((attend) => {
+      return {
+        course: attend.session.course.name,
+        tutor: attend.session.tutor?.fullName,
+        startedAt: attend.session.createdAt,
+        endedAt: attend.session.sessionEndAt,
+      };
+    });
+
+    return res.status(200).json({ formattedAttendance });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

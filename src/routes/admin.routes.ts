@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  attendance,
   courses,
   stats,
   students,
@@ -18,3 +19,8 @@ router.get("/courses", courses);
 
 // Tutors endpoint
 router.get("/tutors", tutors);
+
+// Attendance endpoint
+router.get("/attendance", attendance);
+
+export default router;
