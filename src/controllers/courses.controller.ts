@@ -227,3 +227,41 @@ export const studentCourse = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// Tutor's students logic
+export const tutorStudent = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res.status(401).json({ error: "Missing token" });
+    }
+
+    const decoded = verifyToken(token);
+
+    const userId = typeof decoded === "string" ? decoded : decoded.id;
+
+    const students = await prisma.course.findMany({
+      where: {
+        tutorId: userId,
+      },
+      include: {
+        students: {
+          include: {
+            student: true,
+          },
+        },
+        _count: {
+          select: {
+            students: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(students);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ Message: "Internal Server Error" });
+  }
+};

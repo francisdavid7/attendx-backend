@@ -7,6 +7,7 @@ import {
   enroll,
   studentCourse,
   tutorCourse,
+  tutorStudent,
 } from "../controllers/courses.controller.js";
 
 const router = Router();
@@ -31,5 +32,8 @@ router.get("/available-courses", availableCourses);
 
 // Student's course endpoint
 router.get("/student-course", studentCourse);
+
+// Tutor's students logic
+router.get("/tutor-students", tutorStudent);
 
 export default router;
