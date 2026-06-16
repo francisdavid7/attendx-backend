@@ -160,7 +160,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(200).json({ message: "Login successfull" });
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
