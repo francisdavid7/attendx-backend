@@ -1,4 +1,4 @@
-import { baseTemplate } from "./layouts/base-template";
+import { baseTemplate } from "./layouts/base-template.js";
 
 export const welcomeTemplate = (name: string, dashboardLink: string) =>
   baseTemplate({
