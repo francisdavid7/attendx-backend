@@ -6,9 +6,11 @@ import coursesRoutes from "./routes/courses.route.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
 import addminRoutes from "./routes/admin.routes.js";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 import { swaggerSpec } from "./docs/swagger.js";
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieparser());
@@ -20,6 +22,4 @@ app.use("/api/v1/session", attendanceRoutes);
 app.use("/api/v1/admin", addminRoutes);
 
 const PORT = 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT);
