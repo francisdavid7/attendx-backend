@@ -35,6 +35,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
         email: true,
         role: true,
         isVerified: true,
+        isEnrolled: true,
       },
     });
 
