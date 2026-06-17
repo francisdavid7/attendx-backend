@@ -6,7 +6,8 @@ import {
   students,
   tutors,
 } from "../controllers/admin.controller.js";
-const router = Router();
+
+const router: Router = Router();
 
 // Stats endpoint
 router.get("/stats", stats);

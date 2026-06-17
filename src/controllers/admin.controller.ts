@@ -207,7 +207,7 @@ export const attendance = async (req: Request, res: Response) => {
       },
     });
 
-    const formattedAttendance = attendance.map((attend) => {
+    const formattedAttendance = attendance.map((attend: any) => {
       return {
         course: attend.session.course.name,
         tutor: attend.session.tutor?.fullName,

@@ -10,7 +10,7 @@ import {
   studentAttendance,
 } from "../controllers/attendance.controller.js";
 
-const router = Router();
+const router: Router = Router();
 
 // Create session enpdpoint
 router.post("/create-session", createSession);

@@ -10,7 +10,7 @@ import {
   verifyEmail,
 } from "../controllers/auth.controller.js";
 
-const router = Router();
+const router: Router = Router();
 
 // Current user endpoint
 router.get("/me", getCurrentUser);

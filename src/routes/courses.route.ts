@@ -10,7 +10,7 @@ import {
   tutorStudent,
 } from "../controllers/courses.controller.js";
 
-const router = Router();
+const router: Router = Router();
 
 // Create course endpoint
 router.post("/create-course", createCourse);
