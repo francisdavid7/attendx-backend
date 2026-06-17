@@ -131,13 +131,13 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = validatedFields.data;
 
     // Checking if user exists
-    const user = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: {
         email,
       },
     });
 
-    if (!user) {
+    if (!existingUser) {
       return res.status(401).json({
         error: "A user with this email does not exist",
       });
@@ -148,6 +148,17 @@ export const login = async (req: Request, res: Response) => {
     if (!correctPassword) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: existingUser.id,
+      },
+      select: {
+        id: true,
+        role: true,
+        isVerified: true,
+      },
+    });
 
     const accessToken = generateToken({ id: user.id, role: user.role });
 
